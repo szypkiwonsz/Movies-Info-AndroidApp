@@ -1,4 +1,4 @@
-### Android app build in android studio using Java and OMDb API. The app is searching for a few information by giving the title of the movie.
+### Android app build in Android Studio using Java and OMDb API. The app is searching for a few information by giving the title of the movie.
 
 ##### The program do:
 - Takes entered title of the movie and search for year, runtime, genre and director of this movie.
