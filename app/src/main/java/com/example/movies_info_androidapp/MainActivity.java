@@ -25,7 +25,13 @@ public class MainActivity extends AppCompatActivity {
     // Button onClock method.
     public void getMovieData(View view) {
         DownloadTask task = new DownloadTask();
-        task.execute("http://www.omdbapi.com/?t=" + titleMovie.getText().toString() + "&apikey=39f41e43");
+
+        // Replacing spaces in title to underscores.
+        String titleWithoutSpaces = titleMovie.getText().toString();
+        titleWithoutSpaces = titleWithoutSpaces.trim();
+        titleWithoutSpaces = titleWithoutSpaces.replaceAll("\\s", "\u005F");
+
+        task.execute("http://www.omdbapi.com/?t=" + titleWithoutSpaces + "&apikey=39f41e43");
     }
 
     @Override
