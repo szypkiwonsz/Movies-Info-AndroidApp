@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         titleWithoutSpaces = titleWithoutSpaces.trim();
         titleWithoutSpaces = titleWithoutSpaces.replaceAll("\\s", "\u005F");
 
-        task.execute("http://www.omdbapi.com/?t=" + titleWithoutSpaces + "&apikey=39f41e43");
+        task.execute("https://www.omdbapi.com/?t=" + titleWithoutSpaces + "&apikey=39f41e43");
     }
 
     @Override
