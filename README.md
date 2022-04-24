@@ -8,5 +8,5 @@
 - If the user has entered title of the movie that exist.
 
 ##### Tested on:
-- API 24: Android 7.0 (Nougat).
-- Google Pixel.
+- Android 11
+- Nexus 4
