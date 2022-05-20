@@ -1,10 +1,15 @@
 package com.example.movies_info_androidapp;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -16,12 +21,15 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
     EditText titleMovie;
     TextView yearMovie, runtimeMovie, directorMovie, genreMovie;
-
+    ////////////////Bartek/////////////////////
+    Button btnSpeech;
+    ///////////////////////////////////////////
     // Button onClock method.
     public void getMovieData(View view) {
         DownloadTask task = new DownloadTask();
@@ -32,6 +40,15 @@ public class MainActivity extends AppCompatActivity {
         titleWithoutSpaces = titleWithoutSpaces.replaceAll("\\s", "\u005F");
 
         task.execute("https://www.omdbapi.com/?t=" + titleWithoutSpaces + "&apikey=39f41e43");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 111 && resultCode == RESULT_OK){
+            titleMovie.setText(data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS).get(0));
+        }
     }
 
     @Override
@@ -48,7 +65,25 @@ public class MainActivity extends AppCompatActivity {
         directorMovie = findViewById(R.id.directorMovie);
         genreMovie = findViewById(R.id.genreMovie);
 
+        // Barek Wilmowicz edit :)///////////////////////////////////////////
+        btnSpeech = findViewById(R.id.btnSpeech);
+        btnSpeech.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SpeakNow(view);
+            }
+        });
     }
+       private void SpeakNow(View view) {
+           Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+           intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+           intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "You can talk...");
+           startActivityForResult(intent,111);
+        }
+
+
+        ///////////////////////////////////////////
+
 
     public class DownloadTask extends AsyncTask<String, Void, String> {
 
