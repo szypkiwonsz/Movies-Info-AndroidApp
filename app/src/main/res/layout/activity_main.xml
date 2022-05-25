@@ -50,7 +50,7 @@
         android:id="@+id/yearMovie"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="60dp"
         android:text="YEAR"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
@@ -64,7 +64,7 @@
         android:id="@+id/runtimeMovie"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:text="RUNTIME"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
@@ -78,7 +78,7 @@
         android:id="@+id/directorMovie"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:text="GENRE"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
@@ -92,7 +92,7 @@
         android:id="@+id/genreMovie"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:text="DIRECTOR"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
@@ -130,6 +130,44 @@
         app:layout_constraintTop_toBottomOf="@+id/button"
         />
 
+    <Button
+        android:id="@+id/btnPlaySound"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="148dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:background="#F0FFE200"
+        android:onClick="playSound"
+        android:text="play sound"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/directorMovie" />
 
+    <Button
+        android:id="@+id/btnPlaySoundFromNetwork"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="173dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="10dp"
+        android:background="#F0FFE200"
+        android:onClick="playSoundFromNetwork"
+        android:text="sound from network"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnPlaySound" />
+
+    <VideoView
+        android:id="@+id/vdVw"
+        android:layout_width="180dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnPlaySoundFromNetwork"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

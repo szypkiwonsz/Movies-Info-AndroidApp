@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
@@ -22,11 +23,17 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Locale;
+import android.opengl.GLSurfaceView;
+import android.media.AudioAttributes;
+import android.media.MediaPlayer;
+import android.widget.MediaController;
+import android.widget.VideoView;
 
 public class MainActivity extends AppCompatActivity {
 
     EditText titleMovie;
     TextView yearMovie, runtimeMovie, directorMovie, genreMovie;
+    GLSurfaceView imageView;
     ////////////////Bartek/////////////////////
     Button btnSpeech;
     ///////////////////////////////////////////
@@ -52,10 +59,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        GLSurfaceView glSurfaceView = new GLSurfaceView(this);
+        glSurfaceView.setEGLContextClientVersion(2);
+        glSurfaceView.setRenderer(new MyGLRenderer());
+//        setContentView(glSurfaceView);
 
+        setContentView(R.layout.activity_main);
         // Getting typed title of movie by user.
         titleMovie = findViewById(R.id.titleMovie);
 
@@ -64,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         runtimeMovie = findViewById(R.id.runtimeMovie);
         directorMovie = findViewById(R.id.directorMovie);
         genreMovie = findViewById(R.id.genreMovie);
+        imageView = glSurfaceView;
 
         // Barek Wilmowicz edit :)///////////////////////////////////////////
         btnSpeech = findViewById(R.id.btnSpeech);
@@ -73,16 +85,17 @@ public class MainActivity extends AppCompatActivity {
                 SpeakNow(view);
             }
         });
+        this.playVideo();
     }
-       private void SpeakNow(View view) {
-           Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-           intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-           intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "You can talk...");
-           startActivityForResult(intent,111);
-        }
+    private void SpeakNow(View view) {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "You can talk...");
+        startActivityForResult(intent,111);
+    }
 
 
-        ///////////////////////////////////////////
+    ///////////////////////////////////////////
 
 
     public class DownloadTask extends AsyncTask<String, Void, String> {
@@ -125,11 +138,14 @@ public class MainActivity extends AppCompatActivity {
                     runtimeMovie.setVisibility(View.GONE);
                     genreMovie.setVisibility(View.GONE);
                     directorMovie.setVisibility(View.GONE);
+                    imageView.setVisibility(View.GONE);
+
                 }
                 else {
                     runtimeMovie.setVisibility(View.VISIBLE);
                     genreMovie.setVisibility(View.VISIBLE);
                     directorMovie.setVisibility(View.VISIBLE);
+                    imageView.setVisibility(View.VISIBLE);
 
                     String year = jsonObject.getString("Year");
                     String runtime = jsonObject.getString("Runtime");
@@ -140,12 +156,43 @@ public class MainActivity extends AppCompatActivity {
                     runtimeMovie.setText(runtime);
                     genreMovie.setText(genre);
                     directorMovie.setText(director);
+
                 }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         }
 
     }
+    public void playSound(View v) {
+        MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.audio);
+        mediaPlayer.start();
+    }
 
+    public void playSoundFromNetwork(View v) {
+        String url = "https://file-examples.com/storage/fe6bd68931628d5b79b8f47/2017/11/file_example_WAV_1MG.wav";
+        MediaPlayer mediaPlayer = new MediaPlayer();
+        mediaPlayer.setAudioAttributes(
+                new AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                        .setUsage(AudioAttributes.USAGE_MEDIA)
+                        .build()
+        );
+        try {
+            mediaPlayer.setDataSource(url);
+            mediaPlayer.prepare();
+        } catch(Exception e) {
+        }
+        mediaPlayer.start();
+    }
+    public void playVideo() {
+        VideoView videoView =(VideoView)findViewById(R.id.vdVw);
+        MediaController mediaController= new MediaController(this);
+        mediaController.setAnchorView(videoView);
+        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.video);
+        videoView.setMediaController(mediaController);
+        videoView.setVideoURI(uri);
+        videoView.requestFocus();
+        videoView.start();
+    }
 }
